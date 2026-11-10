@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RZD SKY CAFÉ — European Luxury Café</title>
+<meta name="description" content="Konsep 3D RZD Sky Café: café di lantai atas, parkir dan area duduk outdoor di lantai bawah.">
+<style>
+:root{--ivory:#eee9df;--dark:#202522;--green:#344b3d;--gold:#c6a46a;--muted:#a9ada7}
+*{box-sizing:border-box}body{margin:0;background:#151a18;color:var(--ivory);font-family:Inter,Arial,sans-serif}
+header{position:absolute;z-index:5;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:20px 5%;background:linear-gradient(#1118,transparent)}
+.brand{font-weight:800;letter-spacing:3px}.brand span{color:var(--gold)}nav{display:flex;gap:22px}nav a{color:#eee9df;text-decoration:none;font-size:13px}
+.hero{height:100vh;min-height:680px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 35%,#718078,#303d37 50%,#141a17 100%)}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.overlay{position:absolute;z-index:2;left:7%;top:25%;max-width:390px;pointer-events:none}
+.kicker{color:var(--gold);letter-spacing:4px;font-size:11px;font-weight:700}
+h1{font-size:clamp(42px,6vw,76px);line-height:.98;margin:18px 0;font-weight:750;letter-spacing:-2px}
+.overlay p{color:#e0e2dc;line-height:1.7;font-size:15px;max-width:350px}
+.actions{display:flex;gap:12px;margin-top:25px;pointer-events:auto;flex-wrap:wrap}
+.btn{border:1px solid var(--gold);padding:13px 18px;color:#161b18;background:var(--gold);font-weight:700;text-decoration:none;font-size:12px;cursor:pointer}
+.btn.secondary{background:#18201bcc;color:var(--ivory);border-color:#b7b9af}
+.hint{position:absolute;z-index:2;bottom:25px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:1px;color:#eee9dfaa;text-align:center}
+.section{padding:80px 7%;background:#eee9df;color:#242b26}
+.section h2{font-size:34px;margin:0 0 12px}.section p{line-height:1.7;color:#5e665f;max-width:680px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.card{padding:24px;background:#fff;border:1px solid #ded8cc}.card b{display:block;margin-bottom:9px;color:#344b3d}.card small{color:#687168;line-height:1.6}
+footer{padding:25px 7%;background:#202522;color:#c7c9c2;font-size:12px;display:flex;justify-content:space-between}
+@media(max-width:700px){nav{display:none}.overlay{top:17%;left:6%;right:6%;max-width:320px}.overlay p{font-size:13px}.cards{grid-template-columns:1fr}.hero{min-height:650px}.hint{width:90%}}
+</style>
+</head>
+<body>
+<header><div class="brand">RZD <span>SKY</span> CAFÉ</div><nav><a href="#konsep">KONSEP</a><a href="#lantai">AREA</a><a href="#kontak">KONTAK</a></nav></header>
+<main>
+<section class="hero" id="beranda">
+<canvas id="scene"></canvas>
+<div class="overlay"><div class="kicker">EUROPEAN • MODERN • OPEN AIR</div><h1>A café<br>above the city.</h1><p>Ruang hangat bergaya Eropa di lantai atas, dengan parkir dan area duduk santai yang nyaman di lantai bawah.</p>
+<div class="actions"><a class="btn" href="#lantai">JELAJAHI AREA</a><button class="btn secondary" id="rotate">PUTAR 3D ↻</button></div></div>
+<div class="hint">GESER / DRAG UNTUK MELIHAT MODEL 3D • SCROLL UNTUK ZOOM</div>
+</section>
+<section class="section" id="konsep"><div class="kicker">THE DESIGN CONCEPT</div><h2>Elegan dari setiap sudut.</h2><p>Fasad ivory cream, rangka charcoal, aksen bronze, kaca lebar, serta tanaman hijau membentuk suasana café Eropa yang modern dan nyaman.</p></section>
+<section class="section" id="lantai"><div class="kicker">TWO LEVELS • ONE DESTINATION</div><h2>Dua lantai, banyak pengalaman.</h2><div class="cards">
+<div class="card"><b>01 — SKY CAFÉ / LANTAI ATAS</b><small>Ruang indoor ber-AC, meja makan, sofa, bar kopi, jendela kaca lebar, dan balkon dengan railing kaca.</small></div>
+<div class="card"><b>02 — PARKING / LANTAI BAWAH</b><small>Area parkir mobil dan motor dengan jalur masuk-keluar yang jelas serta pencahayaan aman.</small></div>
+<div class="card"><b>03 — GARDEN LOUNGE / LANTAI BAWAH</b><small>Area duduk outdoor, kursi santai, meja kecil, tanaman tropis, dan pencahayaan hangat.</small></div>
+</div></section>
+</main>
+<footer id="kontak"><span>RZD SKY CAFÉ — CONCEPT WEBSITE</span><span>Ivory • Charcoal • Forest • Bronze</span></footer>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+const canvas=document.querySelector('#scene');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x34443c,24,65);
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.1,100);camera.position.set(17,12,22);
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,4,0);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.49;controls.minDistance=11;controls.maxDistance=38;
+scene.add(new THREE.HemisphereLight(0xe8eadc,0x29342e,2));
+const sun=new THREE.DirectionalLight(0xffe2b0,3.1);sun.position.set(-8,16,10);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);
+const mat=(color,roughness=.75,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
+const ivory=mat(0xe9e1d2),dark=mat(0x252b28),glass=new THREE.MeshPhysicalMaterial({color:0x9fb8b0,roughness:.12,metalness:.15,transparent:true,opacity:.34}),green=mat(0x344b3d),wood=mat(0x8a6545),gold=mat(0xc6a46a,.35,.65),concrete=mat(0x777c75);
+function box(w,h,d,m,x,y,z){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o}
+function cylinder(r,h,m,x,y,z){let o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,16),m);o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o}
+// site base and lower parking deck
+box(23,.55,17,concrete,0,.1,0);
+box(20,.35,14,dark,0,.58,0);
+// support columns
+for(const x of [-8.5,8.5])for(const z of [-5.5,5.5])box(.55,5.8,.55,dark,x,3.5,z);
+// upper floor and cafe volume
+box(21,.55,15,dark,0,6.5,0);
+box(20,4.4,13,ivory,0,8.95,0);
+// front and side glass panels
+for(let x=-8.4;x<=8.41;x+=2.1){box(.055,3.35,.08,gold,x,9,6.56);box(1.95,3.25,.045,glass,x+1.0,9,6.54)}
+for(let z=-4.8;z<=4.81;z+=2.4){box(.05,3.2,.08,gold,10.05,9,z);box(.04,3.15,2.2,glass,10.04,9,z+1.1)}
+// roof and pergola
+box(21,.35,15,dark,0,11.25,0);
+for(let x=-9;x<=9;x+=3)box(.16,1.5,14,gold,x,12,0);
+for(let z=-6;z<=6;z+=3)box(21,.12,.16,gold,0,12.7,z);
+// balcony + glass balustrade
+box(22,.2,1.5,wood,0,6.95,7.7);
+box(22,.08,.08,gold,0,8,8.35);
+for(let x=-10;x<=10;x+=1)box(.045,1.0,.045,glass,x,7.48,8.35);
+// sign
+box(5,.75,.18,dark,0,9.8,6.65);
+// lower lounge floor and planters
+box(8,.18,3.2,wood,-5,1.05,7.5);
+for(let x=-9;x<=9;x+=4){box(2,.55,.8,green,x,1.45,8.5);for(let j=0;j<4;j++)cylinder(.17,.9,green,x+(Math.random()-.5)*.7,2.05,8.5+(Math.random()-.5)*.4)}
+// tables and chairs
+for(const [x,z] of [[-5,4],[-1,4],[4,4],[7,-3]]){cylinder(.65,.12,wood,x,1.65,z);cylinder(.09,.8,dark,x,1.25,z);for(const a of [0,Math.PI/2,Math.PI,Math.PI*1.5]){let cx=x+Math.cos(a)*1.05,cz=z+Math.sin(a)*1.05;box(.65,.18,.65,green,cx,1.15,cz);box(.62,.65,.12,wood,cx,1.5,cz-Math.sign(Math.sin(a))*.2)}}
+// cars, simple stylized parked vehicles
+function car(x,z,c){box(2.25,.65,4.1,mat(c,.38),x,1.15,z);box(1.8,.7,2.1,glass,x,1.78,z-.15);for(const wx of [-1.08,1.08])for(const wz of [-1.25,1.25]){let w=cylinder(.38,.2,dark,x+wx,1.0,z+wz);w.rotation.z=Math.PI/2}}
+car(-5,-3,0x566c77);car(0,-3,0x8d8e89);car(5,-3,0x344b3d);
+// parking markings
+for(let x=-8;x<=8;x+=4)box(.07,.02,5,ivory,x,.81,-3.1);
+// decorative trees
+for(const [x,z] of [[-10,7],[10,7],[-10,-6],[10,-6]]){cylinder(.18,2.1,wood,x,1.8,z);let crown=new THREE.Mesh(new THREE.SphereGeometry(1.25,16,12),green);crown.position.set(x,3.25,z);crown.castShadow=true;scene.add(crown)}
+// ground plane
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(200,200),mat(0x26332d));ground.rotation.x=-Math.PI/2;ground.position.y=-.22;ground.receiveShadow=true;scene.add(ground);
+let auto=false;document.querySelector('#rotate').onclick=()=>{auto=!auto;document.querySelector('#rotate').textContent=auto?'HENTIKAN ↻':'PUTAR 3D ↻'};
+function animate(){requestAnimationFrame(animate);if(auto){const p=camera.position;let a=.0025;p.applyAxisAngle(new THREE.Vector3(0,1,0),a)}controls.update();renderer.render(scene,camera)}animate();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+</script>
+</body></html>
